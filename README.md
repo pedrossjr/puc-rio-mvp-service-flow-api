@@ -16,14 +16,14 @@ Antes de enviar um técnico para determinado atendimento, o sistema pode consult
 
 A solução permite:
 
-* Cadastrar chamados técnicos;
-* Consultar chamados cadastrados;
-* Atualizar informações dos chamados;
-* Excluir chamados;
-* Consultar condições meteorológicas;
-* Avaliar o risco climático de um atendimento;
-* Integrar diferentes componentes por meio de HTTP/REST;
-* Persistir os chamados utilizando SQLite.
+- Cadastrar chamados técnicos;
+- Consultar chamados cadastrados;
+- Atualizar informações dos chamados;
+- Excluir chamados;
+- Consultar condições meteorológicas;
+- Avaliar o risco climático de um atendimento;
+- Integrar diferentes componentes por meio de HTTP/REST;
+- Persistir os chamados utilizando SQLite.
 
 ---
 
@@ -106,15 +106,15 @@ Dessa forma, o cliente não precisa acessar diretamente a API externa nem a API 
 
 # 🛠️ Tecnologias utilizadas
 
-* Python 3.12
-* FastAPI
-* Uvicorn
-* SQLAlchemy
-* Pydantic
-* HTTPX
-* SQLite
-* Docker
-* Open-Meteo API
+- Python 3.12
+- FastAPI
+- Uvicorn
+- SQLAlchemy
+- Pydantic
+- HTTPX
+- SQLite
+- Docker
+- Open-Meteo API
 
 ---
 
@@ -183,20 +183,20 @@ Responsável pela comunicação HTTP com a ServiceFlow Risk API.
 
 ## Pré-requisitos
 
-* Python 3.12 ou superior;
-* pip;
-* Git.
+- Python 3.12 ou superior;
+- pip;
+- Git.
 
 Para execução em containers:
 
-* Docker Desktop ou Docker Engine.
+- Docker Desktop ou Docker Engine.
 
 ---
 
 ## 1. Clone o repositório
 
 ```bash
-git clone https://github.com/SEU-USUARIO/serviceflow-api.git
+git clone https://github.com/pedrossjr/puc-rio-mvp-service-flow-api.git
 ```
 
 Entre no diretório:
@@ -610,15 +610,15 @@ A estrutura da tabela principal é baseada no modelo `Chamado`.
 
 Os dados persistidos incluem:
 
-* Identificador;
-* Cliente;
-* Serviço;
-* Cidade;
-* Latitude;
-* Longitude;
-* Data agendada;
-* Status;
-* Data de criação.
+- Identificador;
+- Cliente;
+- Serviço;
+- Cidade;
+- Latitude;
+- Longitude;
+- Data agendada;
+- Status;
+- Data de criação.
 
 ---
 
@@ -690,12 +690,12 @@ Além das operações CRUD, a aplicação implementa uma funcionalidade específ
 
 Essa funcionalidade envolve:
 
-* consumo de serviço externo;
-* processamento dos dados recebidos;
-* comunicação entre APIs;
-* regras de negócio em componente independente;
-* persistência das informações;
-* execução dos componentes em containers Docker.
+- consumo de serviço externo;
+- processamento dos dados recebidos;
+- comunicação entre APIs;
+- regras de negócio em componente independente;
+- persistência das informações;
+- execução dos componentes em containers Docker.
 
 O domínio de gestão de serviços técnicos externos foi escolhido de forma distinta dos cenários de exemplo apresentados no enunciado. O requisito de criatividade solicita justamente aplicação dos componentes em domínio diferente dos exemplos e funcionalidades adicionais além do CRUD básico.
 
