@@ -705,5 +705,5 @@ O domínio de gestão de serviços técnicos externos foi escolhido de forma dis
 
 **Pedro Silva**
 
-Projeto acadêmico — Engenharia de Software
+Projeto acadêmico - Engenharia de Software
 PUC-Rio
