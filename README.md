@@ -188,6 +188,7 @@ docker network create serviceflow-network
 ```bash
 docker run -d --name serviceflow-api --network serviceflow-network -p 8000:8000 -e RISK_API_URL=http://serviceflow-risk-api:8001 serviceflow-api
 ```
+
 ---
 
 ## Verificar os containers
@@ -207,6 +208,7 @@ A API estará disponível em:
 ```text
 http://localhost:8000
 ```
+
 ---
 
 # 📚 Documentação da API
@@ -247,7 +249,7 @@ A aplicação possui operações utilizando os métodos **GET, POST, PUT e DELET
 
 ---
 
-# GET `/`
+### GET `/`
 
 Verifica o status da aplicação.
 
@@ -262,7 +264,7 @@ Verifica o status da aplicação.
 
 ---
 
-# GET `/chamados`
+### GET `/chamados`
 
 Retorna todos os chamados cadastrados.
 
@@ -286,7 +288,7 @@ Retorna todos os chamados cadastrados.
 
 ---
 
-# GET `/chamados/{id}`
+### GET `/chamados/{id}`
 
 Consulta um chamado específico.
 
@@ -300,7 +302,7 @@ Caso o chamado não exista, a API retorna HTTP `404`.
 
 ---
 
-# POST `/chamados`
+### POST `/chamados`
 
 Cria um novo chamado técnico.
 
@@ -329,7 +331,7 @@ ABERTO
 
 ---
 
-# PUT `/chamados/{id}`
+### PUT `/chamados/{id}`
 
 Atualiza as informações de um chamado.
 
@@ -359,7 +361,7 @@ Os campos enviados são atualizados no registro existente.
 
 ---
 
-# DELETE `/chamados/{id}`
+### DELETE `/chamados/{id}`
 
 Remove um chamado.
 
@@ -375,7 +377,7 @@ Caso contrário, retorna HTTP `404`.
 
 ---
 
-# GET `/chamados/{id}/risco`
+### GET `/chamados/{id}/risco`
 
 Consulta o risco climático associado ao chamado.
 
@@ -413,7 +415,6 @@ Depois, os dados são enviados para a ServiceFlow Risk API para classificação.
 ```
 
 > **Observação:** A API principal depende da ServiceFlow Risk API para realizar o cálculo de risco.
-
 
 ---
 
