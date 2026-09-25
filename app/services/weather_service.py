@@ -2,6 +2,9 @@ import httpx
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
+class OpenMeteoIndisponivel(Exception):
+    pass
+
 def consultar_clima(latitude: float, longitude: float):
     params = {
         "latitude": latitude,
@@ -12,13 +15,22 @@ def consultar_clima(latitude: float, longitude: float):
         "timezone": "auto"
     }
 
-    response = httpx.get(
-        OPEN_METEO_URL,
-        params=params,
-        timeout=10.0
-    )
+    try:
+        response = httpx.get(
+            OPEN_METEO_URL,
+            params=params,
+            timeout=10.0
+        )
 
-    response.raise_for_status()
+        response.raise_for_status()
+    except httpx.HTTPStatusError as erro:
+        raise OpenMeteoIndisponivel(
+            "A Open-Meteo respondeu com erro."
+        ) from erro
+    except httpx.RequestError as erro:
+        raise OpenMeteoIndisponivel(
+            "A Open-Meteo está indisponível."
+        ) from erro
 
     dados = response.json()
 

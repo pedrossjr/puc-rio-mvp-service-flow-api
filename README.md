@@ -183,11 +183,42 @@ docker build -t serviceflow-api .
 docker network create serviceflow-network
 ```
 
+## Executar a ServiceFlow Risk API
+
+A Risk API é um projeto separado, com o próprio `Dockerfile`. A imagem precisa ser construída **a partir do diretório do repositório da Risk API** — construir a partir deste diretório gera uma imagem com o código da ServiceFlow API e a rota `/calcular-risco` não existe.
+
+Entre no diretório:
+
+```bash
+cd serviceflow-risk-api
+```
+Na raiz do projeto:
+
+```bash
+docker build -t serviceflow-risk-api .
+```
+
+Os dois containers precisam estar na **mesma rede** para que o Docker resolva o hostname `serviceflow-risk-api`. A porta interna do container é a `8001`, conforme definido no `Dockerfile`.
+
+```bash
+docker run -d --name serviceflow-risk-api --network serviceflow-network -p 8001:8001 serviceflow-risk-api
+```
+
+A Risk API estará disponível em:
+
+```text
+http://localhost:8001
+```
+
 ## Executar a ServiceFlow API
+
+A URL da Risk API é informada pela variável de ambiente `RISK_API_URL`.
 
 ```bash
 docker run -d --name serviceflow-api --network serviceflow-network -p 8000:8000 -e RISK_API_URL=http://serviceflow-risk-api:8001 serviceflow-api
 ```
+
+> **Importante:** a ordem de execução entre os dois containers não importa. O que é obrigatório é que ambos estejam na `serviceflow-network` — o DNS do Docker só resolve o hostname `serviceflow-risk-api` entre containers que compartilham a mesma rede.
 
 ---
 
@@ -197,13 +228,14 @@ docker run -d --name serviceflow-api --network serviceflow-network -p 8000:8000 
 docker ps
 ```
 
-O container deverá estar em execução:
+Os containers deverão estar em execução:
 
 ```text
 serviceflow-api
+serviceflow-risk-api
 ```
 
-A API estará disponível em:
+A ServiceFlow API estará disponível em:
 
 ```text
 http://localhost:8000
@@ -414,7 +446,26 @@ Depois, os dados são enviados para a ServiceFlow Risk API para classificação.
 }
 ```
 
-> **Observação:** A API principal depende da ServiceFlow Risk API para realizar o cálculo de risco.
+> **Observação:** a API principal depende da ServiceFlow Risk API para realizar o cálculo de risco.
+
+### Configuração da Risk API
+
+O endereço da Risk API é definido pela variável de ambiente `RISK_API_URL`.
+
+| Ambiente              | Valor                                  |
+| --------------------- | -------------------------------------- |
+| Docker (compose)      | `http://serviceflow-risk-api:8001`     |
+| Execução local        | `http://localhost:8001`                |
+
+### Erros de dependência
+
+Como o endpoint depende de dois serviços externos, falhas de infraestrutura são traduzidas para respostas explícitas:
+
+| Situação                                      | Resposta | Corpo                                                                  |
+| --------------------------------------------- | -------- | ---------------------------------------------------------------------- |
+| Open-Meteo indisponível                       | `502`    | `Não foi possível consultar os dados meteorológicos.`                    |
+| ServiceFlow Risk API indisponível ou com erro | `502`    | `Não foi possível consultar o risco climático.`                         |
+| Chamado inexistente                           | `404`    | `Chamado não encontrado.`                                               |
 
 ---
 

@@ -9,9 +9,9 @@ from .schemas import (
     ChamadoUpdate
 )
 
-from .services.risk_service import calcular_risco
+from .services.risk_service import RiskAPIIndisponivel, calcular_risco
 
-from .services.weather_service import consultar_clima
+from .services.weather_service import OpenMeteoIndisponivel, consultar_clima
 
 Base.metadata.create_all(bind=engine)
 
@@ -132,16 +132,28 @@ def consultar_risco(chamado_id: int, db: Session = Depends(get_db)):
             detail="Chamado não encontrado."
         )
 
-    clima = consultar_clima(
-        latitude=chamado.latitude,
-        longitude=chamado.longitude
-    )
+    try:
+        clima = consultar_clima(
+            latitude=chamado.latitude,
+            longitude=chamado.longitude
+        )
+    except OpenMeteoIndisponivel:
+        raise HTTPException(
+            status_code=502,
+            detail="Não foi possível consultar os dados meteorológicos."
+        )
 
-    resultado = calcular_risco(
-        temperatura=clima["temperatura"],
-        chuva=clima["chuva"],
-        vento=clima["vento"]
-    )
+    try:
+        resultado = calcular_risco(
+            temperatura=clima["temperatura"],
+            chuva=clima["chuva"],
+            vento=clima["vento"]
+        )
+    except RiskAPIIndisponivel:
+        raise HTTPException(
+            status_code=502,
+            detail="Não foi possível consultar o risco climático."
+        )
 
     return {
         "chamado": chamado.id,

@@ -3,8 +3,11 @@ import httpx
 
 RISK_API_URL = os.getenv(
     "RISK_API_URL",
-    "http://risk-api:8001"
+    "http://serviceflow-risk-api:8001"
 )
+
+class RiskAPIIndisponivel(Exception):
+    pass
 
 def calcular_risco(
     temperatura: float,
@@ -17,12 +20,21 @@ def calcular_risco(
         "vento": vento
     }
 
-    response = httpx.post(
-        f"{RISK_API_URL}/calcular-risco",
-        json=payload,
-        timeout=5.0
-    )
+    try:
+        response = httpx.post(
+            f"{RISK_API_URL}/calcular-risco",
+            json=payload,
+            timeout=5.0
+        )
 
-    response.raise_for_status()
+        response.raise_for_status()
+    except httpx.HTTPStatusError as erro:
+        raise RiskAPIIndisponivel(
+            "A ServiceFlow Risk API respondeu com erro."
+        ) from erro
+    except httpx.RequestError as erro:
+        raise RiskAPIIndisponivel(
+            "A ServiceFlow Risk API está indisponível."
+        ) from erro
 
     return response.json()
